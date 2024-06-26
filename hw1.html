@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <title>Homework-1</title>
+    <style>
+        
+        body {
+            font-family:'Times New Roman', Times, serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #app {
+
+            position: relative;
+            width: 300px;
+            height: 300px;
+            background-color: #080808;
+            box-shadow: 0 0 25px rgba(11, 11, 11, 0.868);
+            overflow: hidden;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: rgb(246, 242, 242);
+        }
+
+        .button-container {
+
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .box {
+
+            width: 50px;
+            height: 50px;
+            background-color: #f62a0a;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            color: white;
+          
+        }
+
+        .label {
+            color: rgb(253, 253, 250);
+        }
+
+        .chro-button-container {
+            top: 3px;
+            left: 3px;
+        }
+        .ana-button-container {
+            top: 3px;
+            right: 3px;
+        }
+        .weat-button-container {
+            bottom: 3px;
+            left: 3px;
+        }
+        .hea-button-container {
+            bottom: 3px;
+            right: 3px;
+        }
+
+        .time {
+            font-size: 40px;
+        }
+        .date {
+            font-size: 20px;
+        }
+
+        .analog-clock {
+
+            width: 250px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function App() {
+            const [page, setPage] = useState('digital');
+
+            const renderPage = () => {
+
+                switch (page) {
+                   
+                    case 'analog':
+
+                        return < AnalogClock />;
+
+                    case 'weather':
+
+                        return < Weather />;
+                    case 'health':
+
+                        return < Health />;
+
+                    case 'chrono':
+
+                        return < Chrono />;
+
+                    default:
+
+                        return < DigitalClock />;
+                }
+            };
+
+            return (
+                <div id="app">
+                    {renderPage()}
+
+                    <div className="button-container chro-button-container">
+
+                        <button className="box" onClick={() => setPage('chrono')}></button>
+
+                        <div className="label bottom">Chrono</div>
+
+                    </div>
+
+                    <div className="button-container ana-button-container">
+
+                        <button className="box" onClick={() => setPage('analog')}></button>
+
+                        <div className="label bottom">Analog</div>
+                        
+                    </div>
+
+                    <div className="button-container weat-button-container">
+
+                        <div className="label top">Weather</div>
+
+                        <button className="box" onClick={() => setPage('weather')}></button>
+
+                    </div>
+
+                    <div className="button-container hea-button-container">
+
+                        <div className="label top">Health</div>
+
+                        <button className="box" onClick={() => setPage('health')}></button>
+
+                    </div>
+                    
+                </div>
+            );
+        }
+
+        function DigitalClock() {
+
+            const [dateTime, setDateTime] = useState(new Date());
+
+            useEffect(() => {
+                const timer = setInterval(() => {
+
+                    //updating the date and time every second
+                    setDateTime(new Date()); 
+
+                }, 1000);
+
+                // cleaning function to clear the interval
+                return () => clearInterval(timer); 
+
+            }, []);
+
+            const formattedTime = dateTime.toLocaleTimeString();
+
+            //fformatting the date into a string representation with specific options
+            const formattedDate = dateTime.toLocaleDateString(
+                'en-US', {
+
+                weekday: 'long',
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+
+            });
+
+            return (
+                <div> {/* use <div> as a wrapper */}
+                    <div className="time">{formattedTime}</div>
+                    <div className="date">{formattedDate}</div>
+                </div>
+            );
+        }
+
+        function AnalogClock() {
+            return <img src="clock.png" alt="Analog Clock" className="analog-clock" />;
+        }
+
+        function Weather() {
+            return (
+                <div>
+
+                    <h2>Weather</h2>
+                    <p>Temperature: 84°F</p>
+                    <p>Wind: 20 km/h</p>
+
+                </div>
+            );
+        }
+
+        function Health() {
+            return (
+                <div>
+                    <h2>Health</h2>
+                    <p>Heart Beat: 85 bpm</p>
+                    <p>Blood Pressure: 120/80 mmHg</p>
+                </div>
+            );
+        }
+
+        function Chrono() {
+            return (
+                <div>
+                    <h2>Chrono</h2>
+                    <p>Stop watch: 00:00:00</p>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('app'));
+
+    </script>
+</body>
+</html>
